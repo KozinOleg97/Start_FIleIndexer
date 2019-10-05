@@ -1,6 +1,8 @@
 ﻿using ExcelLibrary.SpreadSheet;
+using QiHe.CodeLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,32 +13,66 @@ namespace Start_FIleIndexer
     {
         private string path;
 
-        private const string ExcelFileName = "Report";
+        private const string excelFileName = "Report";
         private const string pathToExlFile = "Report\\";
+        private const string extentiot = ".xls";
 
+        public Workbook workbook;
+        public Worksheet worksheet;
 
+        //Load current REPORT.xlx or create new
         public ExceleHelper(string path)
         {
             this.path = path;
 
-            Workbook workbook = new Workbook();
-            Worksheet worksheet = new Worksheet("Report");
+            try
+            {
+                workbook = Workbook.Load(path + pathToExlFile + excelFileName + extentiot);
+                worksheet = workbook.Worksheets[0];
+            }
+            catch //if file not found
+            {
 
-            // create 100 empty cells for Excel 2010>
-            for (int i = 0; i < 100; i++)
-                worksheet.Cells[i, 0] = new Cell("");
+                workbook = new Workbook();
+                worksheet = new Worksheet("Report");
 
-            workbook.Worksheets.Add(worksheet);
-            workbook.Save(path + pathToExlFile + ExcelFileName + ".xls");
+                // create 100 empty cells for Excel 2010>
+                for (int i = 0; i < 101; i++)
+                    worksheet.Cells[i, 0] = new Cell("");
+
+                //workbook.Worksheets.Add(worksheet);
+                //workbook.Save(path + pathToExlFile + excelFileName + extentiot);
+            }
+
+
+
+
         }
 
-        public Workbook LoadFromFile()
+
+        public void CheckFromTable(FileHelper fileHelper)
         {
 
-            return Workbook.Load("path");
+            // traverse rows by Index
+            Cell cell_0;
+            Cell cell_1;
+            for (int rowIndex = worksheet.Cells.FirstRowIndex; rowIndex <= worksheet.Cells.LastRowIndex; rowIndex++)
+            {
+                Row row = worksheet.Cells.GetRow(rowIndex);
+
+                cell_0 = row.GetCell(0);
+                cell_1 = row.GetCell(1);
+
+                fileHelper.DelleteByValue(cell_1.Value.ToString());
+
+                /*for (int colIndex = row.FirstColIndex;  colIndex <= row.LastColIndex; colIndex++)
+                {
+                    Cell cell = row.GetCell(colIndex);
+                    Console.WriteLine( cell.Value.ToString());
+                }*/
+            }
+
         }
-
-
 
 
     }

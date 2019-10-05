@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ExcelLibrary.SpreadSheet;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,21 +19,18 @@ namespace Start_FIleIndexer
             //path = Console.ReadLine();            
 
             //creating fileName
-            String newExcelFileName = "Report";// + DateTime.Now.ToString("yyyy-MM-dd (h mm ss)tt");
+            
 
             ExceleHelper excele = new ExceleHelper(path);
+            FileHelper fileHelper = new FileHelper(path);
 
+            excele.CheckFromTable(fileHelper);
 
-            Workbook workbook = excele.LoadFromFile();
+            //Workbook workbook = excele.LoadFromFile();
 
-            //initialization & new doc
-            DirectoryInfo dir = new DirectoryInfo(path);
+            
 
-
-            //write to cells
-            FileInfo[] allFiles = dir.GetFiles("*.doc");
-
-            for (int cnt = 0; cnt < allFiles.Length; cnt++)
+            /*for (int cnt = 0; cnt < allFiles.Length; cnt++)
             {
 
                 worksheet.Cells[cnt, 0] = new Cell(allFiles[cnt].Name);
@@ -46,7 +45,7 @@ namespace Start_FIleIndexer
 
             //save
             workbook.Worksheets.Add(worksheet);
-            workbook.Save(path + newExcelFileName + ".xls");
+            workbook.Save(path + newExcelFileName + ".xls");*/
 
 
 
