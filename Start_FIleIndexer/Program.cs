@@ -13,18 +13,21 @@ namespace Start_FIleIndexer
         static void Main(string[] args)
         {
 
-            String path = "E:\\Programming\\Start Testing Folder\\";
+            String pathToOld = "E:\\Programming\\Start Testing Folder\\";
+            String pathToNew = "E:\\Programming\\Start Testing Folder\\New Files\\";
 
             //Console.WriteLine("Path:");
             //path = Console.ReadLine();            
 
             //creating fileName
-            
 
-            ExceleHelper excele = new ExceleHelper(path);
-            FileHelper fileHelper = new FileHelper(path);
+
+            ExceleHelper excele = new ExceleHelper(pathToOld);
+            FileHelper fileHelper = new FileHelper(pathToOld, pathToNew);
 
             excele.CheckFromTable(fileHelper);
+            excele.AddNewFiles(fileHelper);
+            excele.Save();
 
             //Workbook workbook = excele.LoadFromFile();
 

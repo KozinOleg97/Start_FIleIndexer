@@ -17,8 +17,10 @@ namespace Start_FIleIndexer
         private const string pathToExlFile = "Report\\";
         private const string extentiot = ".xls";
 
-        public Workbook workbook;
-        public Worksheet worksheet;
+        private Workbook workbook;
+        private Worksheet worksheet;
+
+        private int lastIndex = 0;
 
         //Load current REPORT.xlx or create new
         public ExceleHelper(string path)
@@ -37,33 +39,76 @@ namespace Start_FIleIndexer
                 worksheet = new Worksheet("Report");
 
                 // create 100 empty cells for Excel 2010>
-                for (int i = 0; i < 101; i++)
+
+                worksheet.Cells[0, 0] = new Cell("Index");
+                worksheet.Cells[0, 1] = new Cell("New Name");
+                worksheet.Cells[0, 2] = new Cell("Old Name");
+                for (int i = 1; i < 101; i++)
+                {
                     worksheet.Cells[i, 0] = new Cell("");
+                }
 
-                //workbook.Worksheets.Add(worksheet);
-                //workbook.Save(path + pathToExlFile + excelFileName + extentiot);
+
+
+
             }
-
-
-
 
         }
 
+        public void Save()
+        {
+            try
+            {
+                workbook.Worksheets[0] = worksheet;
+            }
+            catch
+            {
+                workbook.Worksheets.Add(worksheet);
+            }
+
+            workbook.Save(path + pathToExlFile + excelFileName + extentiot);
+
+        }
+
+        public void AddNewFiles(FileHelper fileHelper)
+        {
+            string newName;
+            foreach (FileInfo file in fileHelper.AllFilesOld)
+            {
+                lastIndex++;
+                newName = String.Format("{0:d4}", lastIndex) + "_" + file.Name;
+
+                file.CopyTo(fileHelper.PathToNewFiles + newName);
+
+                worksheet.Cells[lastIndex, 0] = new Cell(String.Format("{0:d4}", lastIndex));
+                worksheet.Cells[lastIndex, 1] = new Cell(newName);
+                worksheet.Cells[lastIndex, 2] = new Cell(file.Name);
+
+                
+
+            }
+        }
 
         public void CheckFromTable(FileHelper fileHelper)
         {
 
             // traverse rows by Index
-            Cell cell_0;
-            Cell cell_1;
-            for (int rowIndex = worksheet.Cells.FirstRowIndex; rowIndex <= worksheet.Cells.LastRowIndex; rowIndex++)
+            Cell newName;
+            Cell oldName;
+            for (int rowIndex = worksheet.Cells.FirstRowIndex+1; rowIndex <= worksheet.Cells.LastRowIndex; rowIndex++)
             {
                 Row row = worksheet.Cells.GetRow(rowIndex);
 
-                cell_0 = row.GetCell(0);
-                cell_1 = row.GetCell(1);
+                newName = row.GetCell(1);
+                oldName = row.GetCell(2);
 
-                fileHelper.DelleteByValue(cell_1.Value.ToString());
+                if (row.GetCell(0).Value.ToString() != "")
+                {
+                    fileHelper.DelleteByValue(newName.Value.ToString(), oldName.Value.ToString());
+                    lastIndex++;
+                }
+
+
 
                 /*for (int colIndex = row.FirstColIndex;  colIndex <= row.LastColIndex; colIndex++)
                 {
