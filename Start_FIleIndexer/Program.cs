@@ -13,13 +13,14 @@ namespace Start_FIleIndexer
         static void Main(string[] args)
         {
 
+            /*
+             1) Need to specify paths
+             2) Need to specify exnetion of files
+             
+              */
+
             String pathToOld = "E:\\Programming\\Start Testing Folder\\";
-            String pathToNew = "E:\\Programming\\Start Testing Folder\\New Files\\";
-
-            //Console.WriteLine("Path:");
-            //path = Console.ReadLine();            
-
-            //creating fileName
+            String pathToNew = "E:\\Programming\\Start Testing Folder\\New Files\\";           
 
 
             ExceleHelper excele = new ExceleHelper(pathToOld);
@@ -28,32 +29,7 @@ namespace Start_FIleIndexer
             excele.CheckFromTable(fileHelper);
             excele.AddNewFiles(fileHelper);
             excele.Save();
-
-            //Workbook workbook = excele.LoadFromFile();
-
-            
-
-            /*for (int cnt = 0; cnt < allFiles.Length; cnt++)
-            {
-
-                worksheet.Cells[cnt, 0] = new Cell(allFiles[cnt].Name);
-                worksheet.Cells[cnt, 1] = new Cell(cnt);
-                File.Move(allFiles[cnt].FullName, path + cnt + "_" +
-                    Path.GetFileNameWithoutExtension(allFiles[cnt].Name) + ".doc");
-
-            }
-
-
-            // System.IO.File.Move("oldfilename", "newfilename");
-
-            //save
-            workbook.Worksheets.Add(worksheet);
-            workbook.Save(path + newExcelFileName + ".xls");*/
-
-
-
-            Console.WriteLine("Done");
-            Console.ReadKey();
+                                   
         }
     }
 }

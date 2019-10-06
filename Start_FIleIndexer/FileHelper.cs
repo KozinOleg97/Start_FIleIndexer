@@ -16,37 +16,40 @@ namespace Start_FIleIndexer
         private List<FileInfo> allFilesOld;
         private List<FileInfo> allFilesNew;
         
-
+        //Constructor read file info from both (old & new) dirs
         public FileHelper(string pathToOldFiles, string pathToNewFiles)
         {
             this.PathToOldFiles = pathToOldFiles;
             this.PathToNewFiles = pathToNewFiles;
 
-            //read dir
+            //read dirs
             DirectoryInfo dirOld = new DirectoryInfo(pathToOldFiles);
             DirectoryInfo dirNew = new DirectoryInfo(pathToNewFiles);
 
 
             //Get all files info with the specified extension
-            allFilesOld  = dirOld.GetFiles(extentionPattern).ToList();
+            AllFilesOld1  = dirOld.GetFiles(extentionPattern).ToList();
             allFilesNew = dirNew.GetFiles(extentionPattern).ToList();            
         }
 
-        public List<FileInfo> AllFilesOld { get => allFilesOld; set => allFilesOld = value; }
+        //properties
+        public List<FileInfo> AllFilesOld { get => AllFilesOld1; set => AllFilesOld1 = value; }
         public string PathToOldFiles { get => pathToOldFiles; set => pathToOldFiles = value; }
         public string PathToNewFiles { get => pathToNewFiles; set => pathToNewFiles = value; }
+        public List<FileInfo> AllFilesOld1 { get => allFilesOld; set => allFilesOld = value; }
 
+        //method that del file from list of OLD FILES if it exist in list NEW FILES. For files from REPORT
         public void DelleteByValue(string toFindValue, string toDelValue)
         {
             foreach (FileInfo indexedFile in allFilesNew)
             {
                 if (indexedFile.Name == toFindValue)
                 {
-                    foreach(FileInfo notIndexedFile in allFilesOld)
+                    foreach(FileInfo notIndexedFile in AllFilesOld1)
                     {
                         if (notIndexedFile.Name == toDelValue)
                         {
-                            allFilesOld.Remove(notIndexedFile);
+                            AllFilesOld1.Remove(notIndexedFile);
                             return;
                         }
                     }
@@ -54,28 +57,6 @@ namespace Start_FIleIndexer
             }
 
 
-
-
-
-
-
-
-
-
-         /*   for (int i = 0; i < allFilesNew.Length; i++)
-            {                
-                if (allFilesNew[i].Name == toFindValue)
-                {
-                   for (int j = 0; j < allFilesOld.Length; j++)
-                    {
-                        if (allFilesOld[i].Name == toDelValue)
-                        {
-                            allFilesOld[i] = new Fi;
-                            return;
-                        }
-                    }
-                }
-            }*/
         }
 
     }

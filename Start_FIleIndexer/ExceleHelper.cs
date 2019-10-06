@@ -20,9 +20,10 @@ namespace Start_FIleIndexer
         private Workbook workbook;
         private Worksheet worksheet;
 
+        //Index of last not empty raw
         private int lastIndex = 0;
 
-        //Load current REPORT.xlx or create new
+        //Load current REPORT.xls or create new
         public ExceleHelper(string path)
         {
             this.path = path;
@@ -48,13 +49,11 @@ namespace Start_FIleIndexer
                     worksheet.Cells[i, 0] = new Cell("");
                 }
 
-
-
-
             }
 
         }
 
+        //Add result worksheet to current workbook & save it
         public void Save()
         {
             try
@@ -63,6 +62,7 @@ namespace Start_FIleIndexer
             }
             catch
             {
+                //if no worksheet
                 workbook.Worksheets.Add(worksheet);
             }
 
@@ -70,6 +70,7 @@ namespace Start_FIleIndexer
 
         }
 
+        //Add files to REPORT & create NEW FILE with INDEX
         public void AddNewFiles(FileHelper fileHelper)
         {
             string newName;
@@ -83,19 +84,15 @@ namespace Start_FIleIndexer
                 worksheet.Cells[lastIndex, 0] = new Cell(String.Format("{0:d4}", lastIndex));
                 worksheet.Cells[lastIndex, 1] = new Cell(newName);
                 worksheet.Cells[lastIndex, 2] = new Cell(file.Name);
-
-                
-
             }
         }
 
+        //iterates through REPORT & remove existing files from consideration
         public void CheckFromTable(FileHelper fileHelper)
-        {
-
-            // traverse rows by Index
+        {            
             Cell newName;
             Cell oldName;
-            for (int rowIndex = worksheet.Cells.FirstRowIndex+1; rowIndex <= worksheet.Cells.LastRowIndex; rowIndex++)
+            for (int rowIndex = worksheet.Cells.FirstRowIndex + 1; rowIndex <= worksheet.Cells.LastRowIndex; rowIndex++)
             {
                 Row row = worksheet.Cells.GetRow(rowIndex);
 
@@ -108,13 +105,6 @@ namespace Start_FIleIndexer
                     lastIndex++;
                 }
 
-
-
-                /*for (int colIndex = row.FirstColIndex;  colIndex <= row.LastColIndex; colIndex++)
-                {
-                    Cell cell = row.GetCell(colIndex);
-                    Console.WriteLine( cell.Value.ToString());
-                }*/
             }
 
         }
