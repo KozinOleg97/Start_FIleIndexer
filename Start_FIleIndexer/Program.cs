@@ -15,7 +15,7 @@ namespace Start_FIleIndexer
 
             /*
              1) Need to specify paths
-             2) Need to specify exnetion of files
+             2) Need to specify extensions of files
              
               */
 
