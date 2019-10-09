@@ -43,9 +43,9 @@ namespace Start_FIleIndexer
 
                 // create 100 empty cells for Excel 2010>
 
-                worksheet.Cells[0, 0] = new Cell("Index");
-                worksheet.Cells[0, 1] = new Cell("New Name");
-                worksheet.Cells[0, 2] = new Cell("Old Name");
+                worksheet.Cells[0, 0] = new Cell("Инвентарный номер Т.П.");
+                worksheet.Cells[0, 1] = new Cell("Изделия");
+                worksheet.Cells[0, 2] = new Cell("Имя файла");
                 for (int i = 1; i < 101; i++)
                 {
                     worksheet.Cells[i, 0] = new Cell("");
@@ -83,9 +83,9 @@ namespace Start_FIleIndexer
 
                 file.CopyTo(fileHelper.PathToNewFiles + newName);
 
-                worksheet.Cells[lastIndex, 0] = new Cell(String.Format("{0:d4}", lastIndex));
-                worksheet.Cells[lastIndex, 1] = new Cell(newName);
-                worksheet.Cells[lastIndex, 2] = new Cell(file.Name);
+                worksheet.Cells[lastIndex, 0] = new Cell(String.Format("{0:d5}", lastIndex));
+                worksheet.Cells[lastIndex, 2] = new Cell(newName);
+                worksheet.Cells[lastIndex, 1] = new Cell(file.Name);
             }
         }
 
