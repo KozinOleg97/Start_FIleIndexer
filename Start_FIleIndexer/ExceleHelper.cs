@@ -1,12 +1,7 @@
 ﻿using ExcelLibrary.SpreadSheet;
-using QiHe.CodeLib;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_FIleIndexer
 {
@@ -57,7 +52,7 @@ namespace Start_FIleIndexer
 
         //Add result worksheet to current workbook & save it
         public void Save()
-        {
+        {            
             try
             {
                 workbook.Worksheets[0] = worksheet;
