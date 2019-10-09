@@ -13,7 +13,7 @@ namespace Start_FIleIndexer
     {
         private string pathToOldFiles;
         private string pathToNewFiles;
-        private string extentionPattern = "*.doc";
+        private string extentionPattern = "*";
 
         private List<FileInfo> allFilesOld;
         private List<FileInfo> allFilesNew;
@@ -23,7 +23,8 @@ namespace Start_FIleIndexer
         {
             //read settings from .config
             this.pathToOldFiles = ConfigurationManager.AppSettings["pathToOldFiles"];
-            this.PathToNewFiles = ConfigurationManager.AppSettings["pathToNewFiles"];            
+            this.PathToNewFiles = ConfigurationManager.AppSettings["pathToNewFiles"];
+            this.extentionPattern = ConfigurationManager.AppSettings["extentionPattern"];
 
             //read dirs
             DirectoryInfo dirOld = new DirectoryInfo(pathToOldFiles);
