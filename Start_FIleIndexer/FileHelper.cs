@@ -11,6 +11,8 @@ namespace Start_FIleIndexer
 {
     class FileHelper
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private string pathToOldFiles;
         private string pathToNewFiles;
         private string extentionPattern = "*";
@@ -26,21 +28,32 @@ namespace Start_FIleIndexer
             this.PathToNewFiles = ConfigurationManager.AppSettings["pathToNewFiles"];
             this.extentionPattern = ConfigurationManager.AppSettings["extentionPattern"];
 
-            //read dirs
-            DirectoryInfo dirOld = new DirectoryInfo(pathToOldFiles);
-            DirectoryInfo dirNew = new DirectoryInfo(pathToNewFiles);
+            DirectoryInfo dirOld=null;
+            DirectoryInfo dirNew=null;
+
+            try
+            {
+                //read dirs
+                dirOld = new DirectoryInfo(pathToOldFiles);
+                dirNew = new DirectoryInfo(pathToNewFiles);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Read dirs info go wrong (Filehelper)");
+                System.Environment.Exit(0);
+                
+            }
 
 
             //Get all files info with the specified extension
-            AllFilesOld1  = dirOld.GetFiles(extentionPattern).ToList();
+            allFilesOld = dirOld.GetFiles(extentionPattern).ToList();
             allFilesNew = dirNew.GetFiles(extentionPattern).ToList();            
         }
 
         //properties
-        public List<FileInfo> AllFilesOld { get => AllFilesOld1; set => AllFilesOld1 = value; }
+        public List<FileInfo> AllFilesOld { get => allFilesOld; set => allFilesOld = value; }
         public string PathToOldFiles { get => pathToOldFiles; set => pathToOldFiles = value; }
-        public string PathToNewFiles { get => pathToNewFiles; set => pathToNewFiles = value; }
-        public List<FileInfo> AllFilesOld1 { get => allFilesOld; set => allFilesOld = value; }
+        public string PathToNewFiles { get => pathToNewFiles; set => pathToNewFiles = value; }        
 
         //method that del file from list of OLD FILES if it exist in list NEW FILES. For files from REPORT
         public void DelleteByValue(string toFindValue, string toDelValue)
@@ -49,11 +62,11 @@ namespace Start_FIleIndexer
             {
                 if (indexedFile.Name == toFindValue)
                 {
-                    foreach(FileInfo notIndexedFile in AllFilesOld1)
+                    foreach(FileInfo notIndexedFile in allFilesOld)
                     {
                         if (notIndexedFile.Name == toDelValue)
                         {
-                            AllFilesOld1.Remove(notIndexedFile);
+                            allFilesOld.Remove(notIndexedFile);
                             return;
                         }
                     }

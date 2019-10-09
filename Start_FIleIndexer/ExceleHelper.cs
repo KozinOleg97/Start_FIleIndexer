@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 namespace Start_FIleIndexer
 {
     class ExceleHelper
-    {      
+    {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private string excelFileName;
         private string pathToExlFile;
         private string extention = ".xls";
@@ -28,8 +30,8 @@ namespace Start_FIleIndexer
             //read settings from .config
             this.pathToExlFile = ConfigurationManager.AppSettings["pathToExlFile"];
             this.excelFileName = ConfigurationManager.AppSettings["excelFileName"];
-            
 
+            logger.Info("Create new REPORT file");
             try
             {
                 workbook = Workbook.Load(pathToExlFile + excelFileName + extention);
@@ -51,6 +53,8 @@ namespace Start_FIleIndexer
                     worksheet.Cells[i, 0] = new Cell("");
                 }
 
+                logger.Info("Create new REPORT file");
+
             }
 
         }
@@ -68,24 +72,38 @@ namespace Start_FIleIndexer
                 workbook.Worksheets.Add(worksheet);
             }
 
-            workbook.Save(pathToExlFile + excelFileName + extention);
+            try
+            {
+                workbook.Save(pathToExlFile + excelFileName + extention);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Saving REPORT go wrong (ExceleHelper)");
+            }
 
         }
 
         //Add files to REPORT & create NEW FILE with INDEX
         public void AddNewFiles(FileHelper fileHelper)
         {
-            string newName;
-            foreach (FileInfo file in fileHelper.AllFilesOld)
+            try
             {
-                lastIndex++;
-                newName = String.Format("{0:d4}", lastIndex) + "_" + file.Name;
+                string newName;
+                foreach (FileInfo file in fileHelper.AllFilesOld)
+                {
+                    lastIndex++;
+                    newName = String.Format("{0:d4}", lastIndex) + "_" + file.Name;
 
-                file.CopyTo(fileHelper.PathToNewFiles + newName);
+                    file.CopyTo(fileHelper.PathToNewFiles + newName);
 
-                worksheet.Cells[lastIndex, 0] = new Cell(String.Format("{0:d4}", lastIndex));
-                worksheet.Cells[lastIndex, 1] = new Cell(newName);
-                worksheet.Cells[lastIndex, 2] = new Cell(file.Name);
+                    worksheet.Cells[lastIndex, 0] = new Cell(String.Format("{0:d4}", lastIndex));
+                    worksheet.Cells[lastIndex, 1] = new Cell(newName);
+                    worksheet.Cells[lastIndex, 2] = new Cell(file.Name);
+                }
+
+            }catch(Exception ex)
+            {
+                logger.Error(ex, "AddNewFiles method go wrong (Excelehelper)");
             }
         }
 

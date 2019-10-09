@@ -29,7 +29,9 @@ namespace Start_FIleIndexer
             excele.CheckFromTable(fileHelper);
             excele.AddNewFiles(fileHelper);
             excele.Save();
-                                   
+
+
+            NLog.LogManager.Shutdown();
         }
     }
 }
