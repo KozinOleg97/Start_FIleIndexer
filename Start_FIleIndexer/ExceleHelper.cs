@@ -1,23 +1,22 @@
-﻿using ExcelLibrary.SpreadSheet;
-using QiHe.CodeLib;
+﻿using IronXL;
+using IronXL.Options;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Start_FIleIndexer
 {
     class ExceleHelper
-    {      
+    {
         private string excelFileName;
         private string pathToExlFile;
         private string extention = ".xls";
+        private int mainFontHight;
 
-        private Workbook workbook;
-        private Worksheet worksheet;
+        private WorkBook workbook;
+        private WorkSheet worksheet;
 
         //Index of last not empty raw
         private int lastIndex = 0;
@@ -28,29 +27,17 @@ namespace Start_FIleIndexer
             //read settings from .config
             this.pathToExlFile = ConfigurationManager.AppSettings["pathToExlFile"];
             this.excelFileName = ConfigurationManager.AppSettings["excelFileName"];
-            
+            this.mainFontHight = Int32.Parse(ConfigurationManager.AppSettings["mainFontHight"]);
 
             try
             {
-                workbook = Workbook.Load(pathToExlFile + excelFileName + extention);
-                worksheet = workbook.Worksheets[0];
+                workbook = WorkBook.Load(pathToExlFile + excelFileName + extention);
+                worksheet = workbook.WorkSheets.First();
             }
             catch //if file not found
             {
-
-                workbook = new Workbook();
-                worksheet = new Worksheet("Report");
-
-                // create 100 empty cells for Excel 2010>
-
-                worksheet.Cells[0, 0] = new Cell("Инвентарный номер Т.П.");
-                worksheet.Cells[0, 1] = new Cell("Изделия");
-                worksheet.Cells[0, 2] = new Cell("Имя файла");
-                for (int i = 1; i < 101; i++)
-                {
-                    worksheet.Cells[i, 0] = new Cell("");
-                }
-
+                workbook = WorkBook.Load("Sample.xls");
+                worksheet = workbook.WorkSheets.First();
             }
 
         }
@@ -58,17 +45,37 @@ namespace Start_FIleIndexer
         //Add result worksheet to current workbook & save it
         public void Save()
         {
+
+            worksheet.Columns[0].Style.LeftBorder.Type = IronXL.Styles.BorderType.Thin;
+            worksheet.Columns[1].Style.LeftBorder.Type = IronXL.Styles.BorderType.Thin;
+            worksheet.Columns[2].Style.LeftBorder.Type = IronXL.Styles.BorderType.Thin;
+            worksheet.Columns[2].Style.RightBorder.Type = IronXL.Styles.BorderType.Thin;
+
+            worksheet.Columns[0].Style.TopBorder.Type = IronXL.Styles.BorderType.Thin;
+            worksheet.Columns[0].Style.BottomBorder.Type = IronXL.Styles.BorderType.Thin;
+
+            worksheet.Columns[1].Style.TopBorder.Type = IronXL.Styles.BorderType.Thin;
+            worksheet.Columns[1].Style.BottomBorder.Type = IronXL.Styles.BorderType.Thin;
+
+            worksheet.Columns[2].Style.TopBorder.Type = IronXL.Styles.BorderType.Thin;
+            worksheet.Columns[2].Style.BottomBorder.Type = IronXL.Styles.BorderType.Thin;
+
+            worksheet.Style.Font.Height = (short)mainFontHight;
+
+
+            worksheet.Rows[0].Style.Font.Height = 10;
+
             try
-            {
-                workbook.Worksheets[0] = worksheet;
+            {                
+                workbook.SaveAs(pathToExlFile + excelFileName + extention);
             }
             catch
             {
                 //if no worksheet
-                workbook.Worksheets.Add(worksheet);
+                //workbook.Worksheets.Add(worksheet);
             }
 
-            workbook.Save(pathToExlFile + excelFileName + extention);
+            //workbook.Save(pathToExlFile + excelFileName + extention);
 
         }
 
@@ -78,36 +85,40 @@ namespace Start_FIleIndexer
             string newName;
             foreach (FileInfo file in fileHelper.AllFilesOld)
             {
-                lastIndex++;
-                newName = String.Format("{0:d4}", lastIndex) + "_" + file.Name;
+
+                newName = String.Format("{0:d5}", lastIndex) + "_" + file.Name;
 
                 file.CopyTo(fileHelper.PathToNewFiles + newName);
 
-                worksheet.Cells[lastIndex, 0] = new Cell(String.Format("{0:d5}", lastIndex));
-                worksheet.Cells[lastIndex, 2] = new Cell(newName);
-                worksheet.Cells[lastIndex, 1] = new Cell(file.Name);
+                worksheet["A" + (lastIndex + 1)].Value = String.Format("{0:d5}", lastIndex);
+                worksheet["B" + (lastIndex + 1)].Value = file.Name;
+                worksheet["c" + (lastIndex + 1)].Value = newName;
+
+                worksheet["B" + (lastIndex + 1)].Style.WrapText = true;
+                worksheet["c" + (lastIndex + 1)].Style.WrapText = true;
+
+                lastIndex++;
             }
         }
 
         //iterates through REPORT & remove existing files from consideration
         public void CheckFromTable(FileHelper fileHelper)
-        {            
-            Cell newName;
-            Cell oldName;
-            for (int rowIndex = worksheet.Cells.FirstRowIndex + 1; rowIndex <= worksheet.Cells.LastRowIndex; rowIndex++)
+        {
+            Range newName;
+            Range oldName;
+
+            lastIndex = worksheet.Rows.Count();
+
+            bool firstRowPass = true;
+            foreach (var row in worksheet.Rows)
             {
-                Row row = worksheet.Cells.GetRow(rowIndex);
+                if (firstRowPass) { firstRowPass = false; continue; }
 
-                newName = row.GetCell(1);
-                oldName = row.GetCell(2);
+                newName = row.Columns[2];
+                oldName = row.Columns[1];
 
-                if (row.GetCell(0).Value.ToString() != "")
-                {
-                    fileHelper.DelleteByValue(newName.Value.ToString(), oldName.Value.ToString());
-                    lastIndex++;
-                }
-
-            }
+                fileHelper.DelleteByValue(newName.StringValue, oldName.StringValue);
+            }          
 
         }
 
