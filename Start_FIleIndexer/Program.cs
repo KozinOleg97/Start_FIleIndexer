@@ -19,12 +19,12 @@ namespace Start_FIleIndexer
              
               */
 
-            String pathToOld = "E:\\Programming\\Start Testing Folder\\";
-            String pathToNew = "E:\\Programming\\Start Testing Folder\\New Files\\";           
+            //String pathToOld = "E:\\Programming\\Start Testing Folder\\";
+           // String pathToNew = "E:\\Programming\\Start Testing Folder\\New Files\\";           
 
 
-            ExceleHelper excele = new ExceleHelper(pathToOld);
-            FileHelper fileHelper = new FileHelper(pathToOld, pathToNew);
+            ExceleHelper excele = new ExceleHelper();
+            FileHelper fileHelper = new FileHelper();
 
             excele.CheckFromTable(fileHelper);
             excele.AddNewFiles(fileHelper);

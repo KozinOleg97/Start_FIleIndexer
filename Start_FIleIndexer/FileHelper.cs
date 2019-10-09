@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
+using System.Configuration;
 
 namespace Start_FIleIndexer
 {
@@ -17,10 +19,11 @@ namespace Start_FIleIndexer
         private List<FileInfo> allFilesNew;
         
         //Constructor read file info from both (old & new) dirs
-        public FileHelper(string pathToOldFiles, string pathToNewFiles)
+        public FileHelper()
         {
-            this.PathToOldFiles = pathToOldFiles;
-            this.PathToNewFiles = pathToNewFiles;
+            //read settings from .config
+            this.pathToOldFiles = ConfigurationManager.AppSettings["pathToOldFiles"];
+            this.PathToNewFiles = ConfigurationManager.AppSettings["pathToNewFiles"];            
 
             //read dirs
             DirectoryInfo dirOld = new DirectoryInfo(pathToOldFiles);

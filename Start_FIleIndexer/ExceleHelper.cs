@@ -2,6 +2,7 @@
 using QiHe.CodeLib;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,12 +11,10 @@ using System.Threading.Tasks;
 namespace Start_FIleIndexer
 {
     class ExceleHelper
-    {
-        private string path;
-
-        private const string excelFileName = "Report";
-        private const string pathToExlFile = "Report\\";
-        private const string extentiot = ".xls";
+    {      
+        private string excelFileName;
+        private string pathToExlFile;
+        private string extention = ".xls";
 
         private Workbook workbook;
         private Worksheet worksheet;
@@ -24,13 +23,16 @@ namespace Start_FIleIndexer
         private int lastIndex = 0;
 
         //Load current REPORT.xls or create new
-        public ExceleHelper(string path)
+        public ExceleHelper()
         {
-            this.path = path;
+            //read settings from .config
+            this.pathToExlFile = ConfigurationManager.AppSettings["pathToExlFile"];
+            this.excelFileName = ConfigurationManager.AppSettings["excelFileName"];
+            
 
             try
             {
-                workbook = Workbook.Load(path + pathToExlFile + excelFileName + extentiot);
+                workbook = Workbook.Load(pathToExlFile + excelFileName + extention);
                 worksheet = workbook.Worksheets[0];
             }
             catch //if file not found
@@ -66,7 +68,7 @@ namespace Start_FIleIndexer
                 workbook.Worksheets.Add(worksheet);
             }
 
-            workbook.Save(path + pathToExlFile + excelFileName + extentiot);
+            workbook.Save(pathToExlFile + excelFileName + extention);
 
         }
 
