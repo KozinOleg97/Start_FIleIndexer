@@ -1,0 +1,12 @@
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\Start_FIleIndexer.exe.config
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\Start_FIleIndexer.exe
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\Start_FIleIndexer.pdb
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\ICSharpCode.SharpZipLib.dll
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\NPOI.dll
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\NPOI.OOXML.dll
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\NPOI.OpenXml4Net.dll
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\NPOI.OpenXmlFormats.dll
+E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.csproj.CoreCompileInputs.cache
+E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.csproj.CopyComplete
+E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.exe
+E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.pdb
