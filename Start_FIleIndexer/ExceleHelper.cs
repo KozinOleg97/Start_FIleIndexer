@@ -23,10 +23,9 @@ namespace Start_FIleIndexer
         private int mainFontHight;
 
 
-
         private IWorkbook workbook;
         private ISheet worksheet;
-        
+
 
         //Index of last not empty raw
         private int lastIndex = 0;
@@ -39,7 +38,7 @@ namespace Start_FIleIndexer
             this.excelFileName = ConfigurationManager.AppSettings["excelFileName"];
             this.mainFontHight = Int32.Parse(ConfigurationManager.AppSettings["mainFontHight"]);
 
-           
+
             FileInfo file = new FileInfo(pathToExlFile + excelFileName + extention);
             if (file.Exists)
             {
@@ -69,7 +68,7 @@ namespace Start_FIleIndexer
             {
                 workbook.Write(stream);
             }
-            
+
         }
 
         //Add files to REPORT & create NEW FILE with INDEX
@@ -96,7 +95,7 @@ namespace Start_FIleIndexer
                 editCellStyle(curRow.GetCell(1));
                 editCellStyle(curRow.GetCell(2));
 
-                
+
                 lastIndex++;
             }
         }
@@ -129,12 +128,12 @@ namespace Start_FIleIndexer
 
         }
 
-
+        //add text warp & borders
         private void editCellStyle(ICell cell)
         {
             cell.CellStyle.WrapText = true;
-            
-            cell.CellStyle.BorderBottom = BorderStyle.Thin;            
+
+            cell.CellStyle.BorderBottom = BorderStyle.Thin;
             cell.CellStyle.BorderTop = BorderStyle.Thin;
             cell.CellStyle.BorderLeft = BorderStyle.Thin;
             cell.CellStyle.BorderRight = BorderStyle.Thin;
