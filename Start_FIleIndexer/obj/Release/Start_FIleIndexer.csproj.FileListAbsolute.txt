@@ -10,3 +10,7 @@ E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.csproj.C
 E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.csproj.CopyComplete
 E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.exe
 E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.pdb
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\NLog.config
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\NLog.dll
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Release\NLog.xml
+E:\Programming\C#\Start\Start_FIleIndexer\obj\Release\Start_FIleIndexer.csprojAssemblyReference.cache

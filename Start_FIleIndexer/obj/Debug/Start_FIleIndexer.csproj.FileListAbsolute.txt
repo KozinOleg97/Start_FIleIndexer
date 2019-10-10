@@ -11,3 +11,6 @@ E:\Programming\C#\Start\Start_FIleIndexer\obj\Debug\Start_FIleIndexer.csproj.Cor
 E:\Programming\C#\Start\Start_FIleIndexer\obj\Debug\Start_FIleIndexer.csproj.CopyComplete
 E:\Programming\C#\Start\Start_FIleIndexer\obj\Debug\Start_FIleIndexer.exe
 E:\Programming\C#\Start\Start_FIleIndexer\obj\Debug\Start_FIleIndexer.pdb
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Debug\NLog.config
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Debug\NLog.dll
+E:\Programming\C#\Start\Start_FIleIndexer\bin\Debug\NLog.xml

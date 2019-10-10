@@ -1,22 +1,18 @@
 ﻿
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.SS.Util;
-using NPOI.HSSF.Util;
-using NPOI.POIFS.FileSystem;
-using NPOI.HPSF;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Data;
-using NPOI.XSSF.UserModel;
+using NLog;
 
 namespace Start_FIleIndexer
 {
     class ExceleHelper
     {
+        // ЛОГЕР
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private string excelFileName;
         private string pathToExlFile;
         private string extention = ".xls";
@@ -33,11 +29,19 @@ namespace Start_FIleIndexer
         //Load current REPORT.xls or create new
         public ExceleHelper()
         {
-            //read settings from .config
-            this.pathToExlFile = ConfigurationManager.AppSettings["pathToExlFile"];
-            this.excelFileName = ConfigurationManager.AppSettings["excelFileName"];
-            this.mainFontHight = Int32.Parse(ConfigurationManager.AppSettings["mainFontHight"]);
 
+            try
+            {
+                //read settings from .config
+                this.pathToExlFile = ConfigurationManager.AppSettings["pathToExlFile"];
+                this.excelFileName = ConfigurationManager.AppSettings["excelFileName"];
+                this.mainFontHight = Int32.Parse(ConfigurationManager.AppSettings["mainFontHight"]);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, this.ToString() + " : config reading err");
+                Environment.Exit(0);
+            }
 
             FileInfo file = new FileInfo(pathToExlFile + excelFileName + extention);
             if (file.Exists)
@@ -82,9 +86,15 @@ namespace Start_FIleIndexer
             foreach (FileInfo file in fileHelper.AllFilesOld)
             {
                 newName = String.Format("{0:d5}", lastIndex) + "_" + file.Name;
-
-                file.CopyTo(fileHelper.PathToNewFiles + newName);
-
+                try
+                {
+                    file.CopyTo(fileHelper.PathToNewFiles + newName);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, this.ToString() + " : Copy file err (most likely someone changed the report file)");
+                    Environment.Exit(0);
+                }
 
                 curRow = worksheet.CreateRow(lastIndex);
                 curRow.CreateCell(0).SetCellValue(String.Format("{0:d5}", lastIndex));
@@ -98,6 +108,10 @@ namespace Start_FIleIndexer
 
                 lastIndex++;
             }
+
+            logger.Info("New files processed: " + fileHelper.AllFilesOld.Count);
+            logger.Info("Total files processed: " + (lastIndex - 1));
+
         }
 
         //iterates through REPORT & remove existing files from consideration
