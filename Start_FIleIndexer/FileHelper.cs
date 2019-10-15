@@ -45,6 +45,8 @@ namespace Start_FIleIndexer
                 //Get all files info with the specified extension
                 AllFilesOld = dirOld.GetFiles(extentionPattern).ToList();
                 allFilesNew = dirNew.GetFiles(extentionPattern).ToList();
+
+                ExcludeTempFiles();
             }
             catch (Exception ex)
             {
@@ -66,11 +68,11 @@ namespace Start_FIleIndexer
             {
                 if (indexedFile.Name == toFindValue_newName)
                 {
-                    foreach (FileInfo notIndexedFile in AllFilesOld)
+                    foreach (FileInfo notIndexedFile in allFilesOld)
                     {
                         if (notIndexedFile.Name == toDelValue_oldName)
                         {
-                            AllFilesOld.Remove(notIndexedFile);
+                            allFilesOld.Remove(notIndexedFile);
                             return;
                         }
                     }
@@ -78,6 +80,28 @@ namespace Start_FIleIndexer
             }
 
 
+        }
+
+
+        public void ExcludeTempFiles()
+        {
+            bool allTempRemoved = false;
+            while (allTempRemoved != true)
+            {
+                allTempRemoved = true;
+                foreach (FileInfo file in allFilesOld)
+                {
+                    if (file.Attributes.HasFlag(FileAttributes.Hidden))
+                    {
+                        allTempRemoved = false;
+                        allFilesOld.Remove(file);
+                        break;
+                    }
+                }
+
+            }
+            
+            
         }
 
     }
